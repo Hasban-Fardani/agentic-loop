@@ -1,0 +1,29 @@
+contract_version: "@@CONTRACT_VERSION@@"
+repository: "@@REPO@@"
+runtime: auto
+# exact | approximate | hybrid | ci_only — wajib jujur. Bila local tidak setara
+# runner CI, tulis approximate/ci_only dan jadikan CI source of truth.
+environment_mode: approximate
+build_mode: required
+services:
+  required: false
+commands:
+  setup: "@@ADAPTER_DIR@@/setup.sh"
+  build: "@@ADAPTER_DIR@@/build.sh"
+  test: "@@ADAPTER_DIR@@/test.sh"
+  lint: "@@ADAPTER_DIR@@/lint.sh"
+  security: "@@ADAPTER_DIR@@/security.sh"
+  healthcheck: "@@ADAPTER_DIR@@/healthcheck.sh"
+  cleanup: "@@ADAPTER_DIR@@/cleanup.sh"
+timeouts_seconds:
+  setup: 300
+  build: 900
+  test: 1800
+  lint: 600
+  security: 900
+  healthcheck: 300
+profiles:
+  smoke: [setup, test]
+  standard: [setup, build, test, lint, security]
+  full: [setup, build, test, lint, security, healthcheck]
+acceptance_evidence_map: "@@AGENT_DIR@@/acceptance-evidence.yaml"

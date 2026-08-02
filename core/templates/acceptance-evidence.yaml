@@ -1,0 +1,16 @@
+# Peta acceptance criteria -> evidence. Mapping kosong atau human_only tanpa
+# approval_ref menolak PASS otomatis (AL_STRICT_ACCEPTANCE=1).
+task_id: TASK-000
+acceptance:
+  - id: AC-1
+    statement: "Ganti dengan acceptance criteria yang dapat diuji"
+    evidence:
+      - test: tests/example_test.sh
+        type: automated
+  - id: AC-2
+    statement: "Kriteria yang hanya bisa dinilai manusia (UX, copy, business rule)"
+    evidence:
+      - type: human_only
+        reviewer: ""
+        # Isi dengan ID approval nyata. Selama PENDING, evidence tidak boleh PASS.
+        approval_ref: PENDING

@@ -1,0 +1,73 @@
+# Policy contract yang diinginkan untuk agent harness apa pun.
+# Ini BUKAN file config harness. Ia kontrak yang diverifikasi `al verify`.
+# Nama field harness berbeda-beda; petakan di harness_mapping dan UJI perilaku
+# aktualnya, jangan asumsikan nama field sama.
+profile: constrained-worker-v1
+policy_version: "@@POLICY_VERSION@@"
+
+execution:
+  serial_only: true
+  max_active_tasks: 1
+  max_active_subagents: 0
+
+memory:
+  mode: context_only        # off | context_only ; never audit_source
+  external_provider: disabled
+  write_approval: required
+
+skills:
+  source: allowlist_and_project
+  agent_created_write: approval_required
+  external_directories: read_only
+
+delegation:
+  enabled: false
+gateway:
+  enabled: false
+mcp:
+  mode: manual_allowlist
+trajectory:
+  export: disabled
+prompt_optimization:
+  mode: disabled
+
+tools:
+  terminal: enabled
+  file_operations: enabled
+  browser: disabled
+  voice: disabled
+  image_generation: disabled
+  broad_web_search: disabled
+
+# Path yang menjadikan PR high-risk dan wajib approval manusia.
+high_risk_paths:
+  - "@@AGENT_DIR@@/agent-policy.yaml"
+  - "@@AGENT_DIR@@/evidence.yaml"
+  - "@@ADAPTER_DIR@@/security.sh"
+  - ".github/workflows/"
+  - "migrations/"
+
+# Yang TIDAK boleh dilakukan agent, dalam harness mana pun.
+forbidden:
+  - merge_own_pr
+  - push_to_protected_branch
+  - modify_branch_protection
+  - deploy_production
+  - approve_own_changes
+  - read_production_secrets
+
+# Pemetaan ke config harness nyata. Kosongkan bila harness tidak punya field itu;
+# `al verify` melaporkannya sebagai SKIP, bukan lulus diam-diam.
+harness_mapping:
+  hermes:
+    approvals.mode: smart
+    approvals.cron_mode: deny
+    memory.write_approval: true
+    skills.write_approval: true
+    skills.guard_agent_created: true
+    delegation.orchestrator_enabled: false
+    delegation.max_concurrent_children: 1
+  claude: {}
+  codex: {}
+  cursor: {}
+  opencode: {}

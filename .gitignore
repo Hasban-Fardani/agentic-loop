@@ -1,0 +1,22 @@
+# --- secrets & local config: JANGAN pernah masuk repo ---
+.env
+.env.*
+!.env.example
+*.local
+config.env
+
+# --- output runtime ---
+.agent/artifacts/
+.agent/logs/
+.agent/events.jsonl
+*.log
+
+# --- scratch dari self-test ---
+tests/zz_*
+
+# --- OS/editor ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# al — agentic-loop CLI. Satu titik masuk untuk semua harness.
+#
+# Semua konfigurasi lewat environment atau .env; lihat `al doctor` untuk nilai
+# efektif dan `.env.example` untuk daftar variabel.
+set -Eeuo pipefail
+
+AL_BIN_DIR="$(cd "${BASH_SOURCE[0]%/*}" && pwd)"
+AL_HOME="${AL_HOME:-$(cd "$AL_BIN_DIR/.." && pwd)}"
+export AL_HOME
+CMD_DIR="$AL_HOME/core/cmd"
+
+usage() {
+  cat <<'EOF'
+al — agentic-loop: evidence gate & policy toolkit untuk coding agent
+
+USAGE
+  al <command> [args]
+
+EVIDENCE
+  run [profile]        jalankan evidence profile (smoke|standard|full)
+                       exit 0=PASS 1=FAIL 2=UNKNOWN
+  decision             cetak decision + flags dari artifact terakhir
+  verify               self-test policy & permission boundary
+  scan [path]          scanner secret/PII (0=bersih 1=temuan 2=tak terbukti)
+
+WORKFLOW
+  init                 pasang .agent/ + adapter ke repo ini
+  event <type> [k=v]   append event audit (append-only, idempoten)
+  clean                hapus log kedaluwarsa (artifact tidak disentuh)
+
+SETUP
+  install [harness]    pasang skill ke harness (claude|codex|cursor|hermes|opencode|all)
+  uninstall [harness]  lepas skill
+  doctor               laporkan config efektif, tool, harness, dan cek .env safety
+  version              cetak versi
+
+ENVIRONMENT
+  Semua tunable berawalan AL_. Presedensi:
+    default < ~/.config/agentic-loop/config.env < ./.env < environment
+  Secret hanya dari environment/.env dan selalu diredaksi dari log & artifact.
+  Jangan pernah commit .env — hanya .env.example yang masuk repo.
+EOF
+}
+
+cmd="${1:-help}"
+[ $# -gt 0 ] && shift || true
+
+case "$cmd" in
+  run|scan|event|doctor|init|verify|clean|decision)
+    exec bash "$CMD_DIR/$cmd.sh" "$@" ;;
+  install)
+    exec bash "$AL_HOME/install.sh" "$@" ;;
+  uninstall)
+    exec bash "$AL_HOME/install.sh" --uninstall "$@" ;;
+  version|--version|-v)
+    printf 'agentic-loop %s\n' "$(cat "$AL_HOME/VERSION" 2>/dev/null || echo unknown)" ;;
+  help|--help|-h)
+    usage ;;
+  *)
+    printf 'perintah tidak dikenal: %s\n\n' "$cmd" >&2; usage >&2; exit 64 ;;
+esac
