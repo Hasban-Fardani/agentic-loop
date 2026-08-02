@@ -34,6 +34,7 @@ put "$TPL/evidence.yaml"            "$AL_AGENT_DIR/evidence.yaml"
 put "$TPL/acceptance-evidence.yaml" "$AL_AGENT_DIR/acceptance-evidence.yaml"
 put "$TPL/agent-policy.yaml"        "$AL_AGENT_DIR/agent-policy.yaml"
 put "$TPL/scope.yaml"               "$AL_AGENT_DIR/scope.yaml"
+put "$TPL/complexity.yaml"          "$AL_AGENT_DIR/complexity.yaml"
 
 for step in setup build test lint security healthcheck cleanup; do
   put "$TPL/adapters/$step.sh" "$AL_ADAPTER_DIR/$step.sh"

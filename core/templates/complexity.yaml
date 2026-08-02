@@ -1,0 +1,29 @@
+# Budget kompleksitas. Angka di sini adalah HIPOTESIS AWAL, bukan kebenaran.
+#
+# status: candidate  -> temuan dilaporkan tetapi TIDAK memblokir
+# status: approved   -> temuan memblokir (exit 1)
+#
+# Naikkan ke approved hanya setelah threshold divalidasi ke kode nyata repo ini.
+# Alasannya konkret: gaya fluent (query builder Laravel, chained promise) bisa
+# menaikkan CCN tanpa kodenya benar-benar sulit dibaca, jadi 10/15 yang lazim
+# dikutip belum tentu cocok di sini.
+status: candidate
+
+# off      — gate mati total
+# optional — jalan kalau lizard ada; kalau tidak, no_op yang dinyatakan eksplisit
+# required — lizard wajib; absen berarti exit 2 (UNKNOWN), bukan lulus
+mode: optional
+
+engine: lizard
+max_ccn: 10
+max_function_lines: 60
+max_params: 5
+
+# Pengecualian per-fungsi. Nama fungsi harus persis seperti yang dilaporkan
+# lizard. Setiap entri wajib punya alasan, owner, dan tanggal review — tanpa itu
+# pengecualian berubah menjadi tempat sampah permanen.
+exceptions: []
+#  - function: handleLegacyImport
+#    reason: "parser format lama, dipecah setelah migrasi v3"
+#    owner: hasban
+#    review_date: 2026-11-01

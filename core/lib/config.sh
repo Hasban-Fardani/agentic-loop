@@ -120,6 +120,8 @@ al_set_default AL_MANIFEST        "$AL_AGENT_DIR/evidence.yaml"
 al_set_default AL_ACCEPTANCE_MAP  "$AL_AGENT_DIR/acceptance-evidence.yaml"
 al_set_default AL_POLICY_FILE     "$AL_AGENT_DIR/agent-policy.yaml"
 al_set_default AL_SCOPE_FILE      "$AL_AGENT_DIR/scope.yaml"
+al_set_default AL_COMPLEXITY_FILE "$AL_AGENT_DIR/complexity.yaml"
+al_set_default AL_DISCOVERY_DIR   "$AL_AGENT_DIR/discovery"
 al_set_default AL_ADAPTER_DIR     "scripts/evidence"
 
 # Evidence behaviour.
@@ -131,6 +133,18 @@ al_set_default AL_RISK_TIER          "low"
 al_set_default AL_TASK_ID            "TASK-000"
 al_set_default AL_STRICT_WORKTREE    "1"     # 1 = worktree kotor -> UNKNOWN
 al_set_default AL_STRICT_ACCEPTANCE  "1"     # 1 = human_only tanpa approval -> UNKNOWN
+
+# --- Gate AEP v2.1 (opt-in) ---------------------------------------------------
+# Semua default off supaya repo yang sudah ada tidak berubah perilaku sampai
+# pemiliknya sadar mengaktifkannya.
+al_set_default AL_REQUIRE_DISCOVERY  "0"
+al_set_default AL_COMPLEXITY_MODE    "optional"   # off | optional | required
+al_set_default AL_MAX_CCN            "10"
+al_set_default AL_MAX_FUNCTION_LINES "60"
+al_set_default AL_MAX_PARAMS         "5"
+# Tool opsional. Nilai '-' berarti "anggap tidak ada" untuk menguji degradasi.
+al_set_default AL_LIZARD_COMMAND     ""
+al_set_default AL_CODEGRAPH_COMMAND  ""
 
 # Retention. Artifact TIDAK ikut dihapus oleh cleanup log.
 al_set_default AL_LOG_RETENTION_DAYS      "7"

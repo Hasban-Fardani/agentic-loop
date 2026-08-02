@@ -57,6 +57,10 @@ al run standard        # the gate: 0=PASS 1=FAIL 2=UNKNOWN
 al decision            # decision + flags of the latest artifact
 al verify              # policy & permission boundary self-test
 al scan                # secret/PII scan on its own
+al scope check         # allowed/forbidden path contract
+al discovery start --query "..."   # reuse evidence before writing code
+al complexity check    # cyclomatic complexity against budget
+al selftest            # this toolkit's own test suite
 ```
 
 Profiles come from `.agent/evidence.yaml`:
@@ -119,11 +123,33 @@ rule existed. Check history, not just the working tree.
 | `evidence-gate` | proving a change works; reading an artifact; classifying a red CI check |
 | `risk-gate` | deciding autonomous merge vs human approval; approval validity after a push |
 | `secret-safety` | handling tokens; wiring env config; scanning before publishing |
+| `reuse-first-discovery` | before writing new code; proving you looked for existing code first |
+| `complexity-budget` | measuring cyclomatic complexity against a budget; recording an exception |
 
 Each is a single `SKILL.md` with `name` + `description` frontmatter — the format
 Claude Code, Codex, opencode, and Hermes all read. Cursor gets a generated
 `.cursor/rules/agentic-loop.mdc` pointer instead, because its rule format
 differs; the skill bodies stay the single source.
+
+## What is reused rather than rebuilt
+
+Several problems are already solved well elsewhere, so this toolkit does not
+duplicate them. It provides the mechanical half and defers the judgment half:
+
+| Concern | Upstream to install | What stays here |
+|---|---|---|
+| Planning, TDD, worktree guidance, verification-before-completion | [obra/superpowers](https://github.com/obra/superpowers) | evidence artifacts, worktree lifecycle, tri-state gate |
+| YAGNI, over-engineering review, deliberate-shortcut ledger | [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | `al complexity` — measurement only |
+| ADRs, source-backed decisions, adversarial review | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | artifact validation (planned) |
+| Symbol navigation, impact analysis | [colbymchenry/codegraph](https://github.com/colbymchenry/codegraph) (optional) | `al discovery` — the forcing function |
+
+The split is deliberate. Prose can judge whether an abstraction is speculative; it
+cannot stop the model that wrote the code from calling it simple. A number can.
+Conversely a number cannot tell you a dependency was unnecessary.
+
+See `docs/research/2026-08-02-skill-collections-and-code-intelligence.md` for what
+was verified in each repo, and `docs/AEP-v2.1-STATUS.md` for which gates are built
+versus still open.
 
 ## What this does not do
 

@@ -20,3 +20,7 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+
+# Workspace agent (harness-specific, bukan bagian toolkit)
+.hermes/
+.claude/
