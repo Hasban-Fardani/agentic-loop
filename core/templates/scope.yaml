@@ -1,0 +1,21 @@
+# Scope kontrak untuk satu task. Diisi dari Issue, ditegakkan oleh `al scope check`.
+#
+# Prinsip: scope adalah kontrak yang diperiksa mesin, bukan imbauan di prompt.
+# Role yang "sebaiknya tidak" menyentuh sesuatu akan menyentuhnya; yang menahan
+# adalah pemeriksaan yang gagal.
+task_id: TASK-000
+
+# Path yang boleh diubah. Pola gaya gitignore: `dir/` untuk prefiks direktori,
+# glob untuk file. Kosong berarti tidak dibatasi — nyatakan itu secara sadar.
+allowed:
+  - "src/"
+  - "tests/"
+
+# Dievaluasi lebih dulu dan mengalahkan allowed, sehingga pola luas seperti
+# `src/` tidak diam-diam membuka jalan ke auth atau migration.
+forbidden:
+  - ".agent/agent-policy.yaml"
+  - ".agent/scope.yaml"
+  - ".github/workflows/"
+  - "migrations/"
+  - "src/auth/"

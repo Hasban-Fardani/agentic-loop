@@ -119,6 +119,7 @@ al_set_default AL_EVENT_LOG       "$AL_AGENT_DIR/events.jsonl"
 al_set_default AL_MANIFEST        "$AL_AGENT_DIR/evidence.yaml"
 al_set_default AL_ACCEPTANCE_MAP  "$AL_AGENT_DIR/acceptance-evidence.yaml"
 al_set_default AL_POLICY_FILE     "$AL_AGENT_DIR/agent-policy.yaml"
+al_set_default AL_SCOPE_FILE      "$AL_AGENT_DIR/scope.yaml"
 al_set_default AL_ADAPTER_DIR     "scripts/evidence"
 
 # Evidence behaviour.

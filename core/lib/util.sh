@@ -53,8 +53,12 @@ al_yaml_scalar() { # FILE KEY
 }
 
 al_yaml_seq() { # FILE PARENT KEY  -> "a b c" dari `  key: [a, b, c]`
+  # tr -s meringkas spasi: `[a, b]` menjadi "a b", bukan "a  b". Konsumen
+  # mengandalkan word splitting sehingga spasi ganda tidak merusak, tetapi
+  # nilai yang bisa dibandingkan langsung jauh lebih mudah diuji.
   grep -E "^  $3:[[:space:]]*\[" "$1" 2>/dev/null \
-    | sed -E 's/.*\[(.*)\].*/\1/; s/,/ /g; s/["'"'"']//g'
+    | sed -E 's/.*\[(.*)\].*/\1/; s/,/ /g; s/["'"'"']//g' \
+    | tr -s ' ' | sed -E 's/^ //; s/ $//'
 }
 
 al_yaml_nested() { # FILE PARENT CHILD
