@@ -1,0 +1,1 @@
+{"schema_version":"tasklist/v1","id":"TL-000","plan_id":"P-000","status":"draft","execution":{"mode":"serial","max_active_tasks":1,"require_disjoint_paths":true,"require_disjoint_outputs":true,"fail_fast_on_conflict":true},"tasks":[]}

@@ -1,0 +1,41 @@
+schema_version: "plan/v1"
+id: P-000
+goal_id: G-000
+title: ""
+status: draft
+decision:
+  approach: ""
+  rationale: []
+  rejected: []
+architecture:
+  affected_components: []
+  data_flow: []
+risks: []
+freshness:
+  context7:
+    required: false
+    query: ""
+  agent_reach:
+    required: false
+    query: ""
+tasklists: []
+validation:
+  required: []
+  human_approval:
+    required: false
+    approval_ref: PENDING
+    approved_head_sha: ""
+risk:
+  inherited_tier: low
+  assessed_tier: low
+  reasons: []
+  approval:
+    required: false
+    approval_ref: PENDING
+    approved_head_sha: ""
+execution:
+  mode: serial
+  max_active_tasks: 1
+  require_disjoint_paths: true
+  require_disjoint_outputs: true
+  fail_fast_on_conflict: true

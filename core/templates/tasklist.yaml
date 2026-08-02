@@ -1,0 +1,29 @@
+schema_version: "tasklist/v1"
+id: TL-000
+plan_id: P-000
+status: draft
+execution:
+  mode: serial
+  max_active_tasks: 1
+  require_disjoint_paths: true
+  require_disjoint_outputs: true
+  fail_fast_on_conflict: true
+tasks: []
+  # - id: T-001
+  #   title: ""
+  #   status: pending
+  #   depends_on: []
+  #   allowed_paths: []
+  #   forbidden_paths: []
+  #   risk: low
+  #   definition_of_done:
+  #     outcome: ""
+  #     checks:
+  #       - id: test
+  #         type: command
+  #         command: ""
+  #         expect_exit: 0
+  #   evidence:
+  #     artifact: ".agent/artifacts/T-001.json"
+  #   -- parallel hanya setelah DAG/path/output validation PASS --
+  #   parallel_group: ""

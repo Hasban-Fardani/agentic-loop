@@ -1,0 +1,15 @@
+{
+  "schema_version": "goal/v1",
+  "id": "G-000",
+  "title": "",
+  "status": "draft",
+  "owner": "human",
+  "intent": {"statement": "", "context": [], "non_goals": []},
+  "constraints": [],
+  "scope": {"allowed_paths": [], "forbidden_paths": []},
+  "acceptance": [],
+  "freshness": {"context7": "off", "agent_reach": "off"},
+  "risk": {"declared_tier": "low", "escalation": ["auth", "production", "sensitive_data", "control_boundary", "irreversible_change"]},
+  "readiness": {"context_complete": false, "scope_clear": false, "constraints_clear": false, "acceptance_testable": false, "risks_identified": false},
+  "plans": []
+}

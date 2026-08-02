@@ -26,23 +26,47 @@ worktree — all `UNKNOWN`, all blocking, and they spend the infrastructure
 recovery budget rather than the code-retry budget. Conflating the two means a
 broken runner looks like a broken feature.
 
-## Install
+## Install toolkit vs initialize project
+
+`install.sh` installs portable skills and the `al` CLI into agent harnesses. It
+must run from the agentic-loop checkout and does not bootstrap project evidence
+contracts.
 
 ```bash
 git clone git@github.com:Hasban-Fardani/agentic-loop.git ~/.agentic-loop
 cd ~/.agentic-loop
-./install.sh --dry-run     # see the plan first
-./install.sh               # detect installed harnesses, install to each
+./install.sh --dry-run     # inspect harness installation
+./install.sh               # install into detected Hermes/Claude/Codex/etc.
 ```
 
-Targets specific harnesses, or opts out of the PATH symlink:
+`project-init.sh` initializes one target project. It writes `.agent/`, evidence
+adapters, `GOALS.md`, and Goal/Plan/Tasklist contracts. It does not install global
+skills. `al init` is the underlying command; wrapper exists to make intent explicit.
+The wrapper resolves `AL_HOME` from its own checkout, so it works when invoked
+from a different project directory.
+
+```bash
+cd /path/to/your-project
+~/.agentic-loop/project-init.sh              # core project contract
+~/.agentic-loop/project-init.sh --aep         # contract + AEP docs
+~/.agentic-loop/project-init.sh --dry-run    # inspect, write nothing
+```
+
+Use `install.sh` once per machine/harness. Use `project-init.sh` once per project.
+Both are idempotent; existing files stay unless `--force`/`AL_FORCE=1` is explicit.
+
+## Harness install
 
 ```bash
 ./install.sh claude codex        # only these
-./install.sh --mode copy        # frozen snapshot instead of symlink
-AL_BIN_DIR=- ./install.sh       # skip linking `al` into PATH
-./install.sh --uninstall        # remove
+./install.sh --mode copy         # frozen snapshot instead of symlink
+AL_BIN_DIR=- ./install.sh        # skip linking `al` into PATH
+./install.sh --uninstall         # remove installed skills
 ```
+
+The `agents` target is the exception: it writes the open-standard `AGENTS.md` to
+`AL_REPO_ROOT` only when absent. It never overwrites an existing project file.
+Use `project-init.sh` for the complete project contract.
 
 Default is symlink: one source of truth, updated by `git pull`. `--mode copy`
 freezes a snapshot instead.
@@ -54,14 +78,61 @@ cd your-repo
 al init                # scaffold .agent/ + evidence adapters
 al doctor              # effective config, tools, harnesses, .env safety
 al run standard        # the gate: 0=PASS 1=FAIL 2=UNKNOWN
-al decision            # decision + flags of the latest artifact
-al verify              # policy & permission boundary self-test
-al scan                # secret/PII scan on its own
-al scope check         # allowed/forbidden path contract
-al discovery start --query "..."   # reuse evidence before writing code
-al complexity check    # cyclomatic complexity against budget
-al selftest            # this toolkit's own test suite
 ```
+
+Full workflow commands follow below.
+
+
+## Goal → Plan → Tasklist
+
+Workflow contracts are separated by responsibility:
+
+```text
+GOALS.md + .agent/goal.json
+  → one active .agent/plan.json
+  → .agent/tasklist.json (DAG; serial by default, parallel only when paths,
+    outputs, dependencies, and shared state are mechanically disjoint)
+```
+
+`GOALS.md` states outcome, non-goals, boundaries, allowed/forbidden paths, risk,
+and freshness requirements. JSON contracts are machine-validated. `al goals start`
+records SHA-256 hashes before coding; mutation after start returns `UNKNOWN`.
+Low risk can proceed after evidence PASS. Medium requires human review. High
+requires human approval tied to the approved commit SHA. Pending approval returns
+`UNKNOWN`; chat is not an approval channel.
+
+```bash
+al goals validate
+al goals start
+al goals verify
+```
+
+Each task needs executable Definition-of-Done checks (`command` + expected exit,
+path/artifact assertions, and scope). A task with failed or unknown dependencies
+is blocked. Ambiguous parallelism returns `UNKNOWN`, never an agent guess.
+
+## Freshness and external reuse
+
+This repository does not vendor third-party skill bodies or pretend upstream tools
+are local implementations. Existing local skills provide mechanical enforcement:
+`evidence-gate`, `risk-gate`, `secret-safety`, `reuse-first-discovery`, and
+`complexity-budget`. Upstream reasoning skills remain attributed external references:
+[obra/superpowers](https://github.com/obra/superpowers) (planning/TDD/review/worktrees),
+[DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) (YAGNI and
+over-engineering review), and [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)
+(ADR/source-driven/adversarial review). Optional code intelligence is documented
+separately; `al discovery` remains the local forcing function.
+
+[Agent-Reach](https://github.com/Panniantong/agent-reach) is an MIT, Python CLI/skill
+for routed web, GitHub, video, RSS, and social-source research. [Context7](https://github.com/upstash/context7)
+is an MIT MCP/CLI/skill set for current, version-specific library documentation.
+Both are optional freshness sources, not evidence-gate replacements: unavailable
+required freshness is `UNKNOWN`, optional freshness is an explicit no-op. Integrations
+are recorded with `al integrate` as pinned, non-vendored manifests under
+`$AL_CONFIG_HOME/integrations/`.
+
+See `docs/research/2026-08-02-skill-collections-and-code-intelligence.md` and
+`docs/AEP-v2.1-STATUS.md` for verified boundaries and open claims.
 
 Profiles come from `.agent/evidence.yaml`:
 

@@ -35,10 +35,20 @@ put "$TPL/acceptance-evidence.yaml" "$AL_AGENT_DIR/acceptance-evidence.yaml"
 put "$TPL/agent-policy.yaml"        "$AL_AGENT_DIR/agent-policy.yaml"
 put "$TPL/scope.yaml"               "$AL_AGENT_DIR/scope.yaml"
 put "$TPL/complexity.yaml"          "$AL_AGENT_DIR/complexity.yaml"
+put "$TPL/GOALS.md"                  "$AL_GOAL_FILE"
+put "$TPL/goal.json"                 "$AL_GOAL_CONTRACT"
+put "$TPL/plan.json"                 "$AL_PLAN_CONTRACT"
+put "$TPL/tasklist.json"             "$AL_TASKLIST_CONTRACT"
 
 for step in setup build test lint security healthcheck cleanup; do
   put "$TPL/adapters/$step.sh" "$AL_ADAPTER_DIR/$step.sh"
 done
+
+if [ "${1:-}" = "--aep" ]; then
+  for f in AGENTS.md WORKFLOW.md TASK_TEMPLATE.md CHECKLIST.md METRICS.md README.md CONVENTIONS.md COMPLEXITY.md; do
+    put "$TPL/aep/$f" "$f"
+  done
+fi
 
 # .gitignore: tambah baris yang belum ada, jangan pernah menulis ulang file user.
 gi="$AL_REPO_ROOT/.gitignore"

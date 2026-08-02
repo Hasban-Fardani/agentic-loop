@@ -240,8 +240,8 @@ Selesai. Langkah berikutnya:
        cp $AL_HOME/.env.example <repo>/.env
   2. Periksa konfigurasi efektif:
        $AL_HOME/bin/al doctor
-  3. Pasang evidence contract di repo target:
-       cd <repo> && $AL_HOME/bin/al init
+  3. Pasang project contract di repo target (bukan install harness):
+       cd <repo> && $AL_HOME/project-init.sh --aep
   4. Jalankan gate:
        $AL_HOME/bin/al run standard
 

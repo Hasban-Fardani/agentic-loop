@@ -28,15 +28,24 @@ EVIDENCE
   scope [check|show]   tegakkan allowed/forbidden path dari task
   complexity [check]   ukur CCN via lizard (0=dalam budget 1=lewat 2=tak terukur)
   discovery <sub>      start|verify|show — bukti pencarian reuse sebelum koding
+  goals <sub>          validate|start|show|verify|findings — Goal → Plan → Tasklist
   verify               self-test policy & permission boundary di repo target
   selftest [pattern]   jalankan test suite toolkit ini sendiri
 
 WORKFLOW
   init                 pasang .agent/ + adapter ke repo ini
+  init --aep           pasang pula template AEP v2.1 jika belum ada
   worktree <sub>       add|list|remove|prune — satu issue = satu worktree
   event <type> [k=v]   append event audit (append-only, idempoten)
   metrics [--json]     hitung ulang metrik dari artifact + event
   clean                hapus log kedaluwarsa (artifact tidak disentuh)
+
+SKILL UPSTREAM (opt-in, pinned, non-vendored)
+  integrate add <url>[@<ref>] <name>
+                       catat manifest upstream di $AL_CONFIG_HOME/integrations/
+  integrate list       tampilkan manifest upstream yang terpasang
+  integrate doctor     laporkan pin, file skill yang sampai, dan deps yang hilang
+  integrate sync <name>  perbarui skill upstream ke ref yang dipin
 
 SETUP
   install [harness]    pasang skill ke harness (claude|codex|cursor|hermes|opencode|all)
@@ -56,7 +65,7 @@ cmd="${1:-help}"
 [ $# -gt 0 ] && shift || true
 
 case "$cmd" in
-  run|scan|event|doctor|init|verify|clean|decision|scope|worktree|metrics|complexity|discovery)
+  run|scan|event|doctor|init|verify|clean|decision|scope|worktree|metrics|complexity|discovery|integrate|goals)
     exec bash "$CMD_DIR/$cmd.sh" "$@" ;;
   selftest)
     exec bash "$AL_HOME/tests/run.sh" "$@" ;;
