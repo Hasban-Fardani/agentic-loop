@@ -7,4 +7,4 @@ AL_HOME="${AL_HOME:-$(cd "${BASH_SOURCE[0]%/*}/../.." && pwd)}"
 . "$AL_HOME/core/lib/bootstrap.sh"
 . "$AL_HOME/core/lib/detect.sh"
 
-al_step "$AL_CMD_SETUP" setup
+al_step_with_secondary "$AL_CMD_SETUP" "$AL_CMD_SETUP_SECONDARY" setup

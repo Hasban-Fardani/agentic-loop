@@ -91,9 +91,29 @@ list; copy it to `.env` and fill in what you need.
 `.env` is parsed as data, never sourced. `EVIL=$(rm -rf /)` in a `.env` is a
 literal string, not a command.
 
-Stack detection covers Node, PHP, Go, Python, Rust, and Makefile repos. Override
-any guess with `AL_CMD_TEST`, `AL_CMD_BUILD`, and friends rather than editing an
-adapter.
+Stack detection covers Node/Deno, PHP, Python, Ruby, Go, Rust, Java (Maven),
+Gradle/Android, Scala, .NET, Elixir, Dart/Flutter, Swift, CMake, Zig, and
+Makefile repos, plus framework detection for Laravel, Symfony, Rails, Django,
+Phoenix, Next.js, Nuxt, SvelteKit, Astro, Angular, NestJS, Expo, Spring Boot and
+others. Override any guess with `AL_CMD_TEST`, `AL_CMD_BUILD`, and friends rather
+than editing an adapter.
+
+Two properties matter more than the length of that list:
+
+- **A framework marker beats a generic manifest.** Laravel 11 ships a
+  `package.json` for Vite; Rails ships one for jsbundling; Django ships one for
+  Tailwind. Detecting `artisan`, `bin/rails`, or `manage.py` decides the primary
+  stack, so a Laravel repo runs Pest rather than `npm test`.
+- **A command is only emitted if the tool is actually there.** `npm run lint` in
+  a repo with no `lint` script exits 1, which looks like failing code rather than
+  an absent linter. Laravel 11 ships Pest, not PHPUnit, so guessing
+  `vendor/bin/phpunit` exits 127 and the gate reports UNKNOWN — spending the
+  infrastructure-recovery budget on our own bad guess. When nothing is found the
+  step declares a `no_op` and names the variable to set.
+
+Frontend assets in a backend repo are handled as a secondary stack: setup and
+build run for both, tests do not. Mixing PHP and JS test output obscures which
+one failed.
 
 ## Secrets
 
