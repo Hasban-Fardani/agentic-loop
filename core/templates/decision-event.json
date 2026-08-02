@@ -1,0 +1,18 @@
+{
+  "schema_version": "decision-event/v1",
+  "event_id": "EV-000",
+  "type": "plan_reviewed",
+  "source": "hermes_dashboard",
+  "actor": {"id": "", "type": "human"},
+  "session_ref": "",
+  "github_ref": "",
+  "repository": "OWNER/REPO",
+  "goal_id": "G-000",
+  "plan_id": "P-000",
+  "tasklist_id": "TL-000",
+  "decision": "reviewed",
+  "head_sha": "",
+  "confirmation": {"required": true, "confirmed": false, "confirmed_at": ""},
+  "rationale": "",
+  "timestamp": ""
+}

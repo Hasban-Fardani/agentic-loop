@@ -7,6 +7,9 @@ set -Eeuo pipefail
 TPL="$AL_HOME/core/templates"
 [ -d "$TPL" ] || al_die "template tidak ditemukan: $TPL"
 
+printf '\nWARNING: agentic-loop hanya untuk development, testing, dan staging.\n' >&2
+printf 'WARNING: jangan gunakan di production atau berikan production secrets.\n\n' >&2
+
 git -C "$AL_REPO_ROOT" rev-parse --git-dir >/dev/null 2>&1 \
   || al_warn "bukan repo git — evidence gate butuh commit SHA untuk mengikat hasil"
 
@@ -39,6 +42,9 @@ put "$TPL/GOALS.md"                  "$AL_GOAL_FILE"
 put "$TPL/goal.json"                 "$AL_GOAL_CONTRACT"
 put "$TPL/plan.json"                 "$AL_PLAN_CONTRACT"
 put "$TPL/tasklist.json"             "$AL_TASKLIST_CONTRACT"
+put "$TPL/github-automation.json"    "$AL_AGENT_DIR/github-automation.json"
+put "$TPL/decision-event.json"       "$AL_AGENT_DIR/decision-event.json"
+[ "${AL_DRY_RUN:-0}" = 1 ] || mkdir -p "$AL_REPO_ROOT/$AL_AGENT_DIR/decisions"
 
 for step in setup build test lint security healthcheck cleanup; do
   put "$TPL/adapters/$step.sh" "$AL_ADAPTER_DIR/$step.sh"

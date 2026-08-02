@@ -68,6 +68,46 @@ The `agents` target is the exception: it writes the open-standard `AGENTS.md` to
 `AL_REPO_ROOT` only when absent. It never overwrites an existing project file.
 Use `project-init.sh` for the complete project contract.
 
+Every install/init prints a non-production warning. This toolkit is for
+**development, testing, and staging only**. Never connect it to production or
+provide production secrets.
+
+## Hermes GitHub automation
+
+GitHub event ingress uses Hermes Agent's existing webhook platform, not a second
+server inside this repository:
+
+```text
+GitHub event → Hermes webhook subscription → Hermes session/tools
+  → draft review/patch → human confirmation → decision artifact + event index
+  → Goal/Plan/Tasklist validation → independent CI
+```
+
+Pilot contract:
+
+```bash
+al github validate
+al github decision .agent/decisions/DEC-<id>.json
+```
+
+Use `docs/HERMES-GITHUB-RUNBOOK.md`. Official Hermes references:
+[GitHub PR webhook guide](https://hermes-agent.nousresearch.com/docs/guides/webhook-github-pr-review)
+and [automation blueprints](https://hermes-agent.nousresearch.com/docs/guides/automation-blueprints#github-event-automations).
+RBAC allowlist, explicit confirmation, separate worktree, no production secrets,
+and current-HEAD SHA binding are mandatory. GitHub App permission stays minimal;
+no merge, approve, force-push, branch-protection, or deploy permission.
+
+Default dynamic subscription shape:
+
+```bash
+hermes webhook subscribe agentic-loop-github \
+  --events pull_request,issue_comment,pull_request_review,pull_request_review_comment,workflow_run \
+  --skills github-code-review --deliver github_comment
+```
+
+Use installed Hermes `--help` for exact flags. Webhook secrets live in Hermes
+secret/config storage, never repository `.env`.
+
 Default is symlink: one source of truth, updated by `git pull`. `--mode copy`
 freezes a snapshot instead.
 

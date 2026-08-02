@@ -1,0 +1,37 @@
+{
+  "schema_version": "github-automation/v1",
+  "environment": "development",
+  "production_allowed": false,
+  "repository": "OWNER/REPO",
+  "hermes": {
+    "mode": "dynamic_subscription",
+    "subscription_name": "agentic-loop-github",
+    "events": [
+      "pull_request",
+      "issue_comment",
+      "pull_request_review",
+      "pull_request_review_comment",
+      "workflow_run"
+    ],
+    "actions": ["opened", "reopened", "synchronize", "created", "submitted", "dismissed", "completed"],
+    "delivery": "github_comment",
+    "skills": ["github-code-review"]
+  },
+  "execution": {
+    "allowed_actors": ["OWNER_OR_MAINTAINER"],
+    "confirmation_required": true,
+    "draft_patch_first": true,
+    "worktree_required": true,
+    "production_secrets": false,
+    "merge_allowed": false,
+    "approve_allowed": false,
+    "force_push_allowed": false,
+    "deploy_allowed": false
+  },
+  "decisions": {
+    "artifact_dir": ".agent/decisions",
+    "event_index": ".agent/events.jsonl",
+    "bind_to_head_sha": true,
+    "invalidate_on_new_head": true
+  }
+}

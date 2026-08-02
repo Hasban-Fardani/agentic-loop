@@ -18,6 +18,7 @@ are not copied into this repository.
 | Hash/scope/approval verification | `al goals verify` | `tests/goals_test.sh` |
 | AEP templates | `al init --aep` | `tests/aep_templates_test.sh` |
 | Project initializer | `project-init.sh [--aep]` | `tests/project_init_test.sh` |
+| Hermes GitHub contract | `al github validate\|decision` | `tests/github_automation_test.sh` |
 | CI contract | `.github/workflows/evidence.yml` | `tests/ci_contract_test.sh` |
 | Upstream manifest | `al integrate list\|doctor\|add\|sync` | `tests/integrate_test.sh` |
 
@@ -42,6 +43,9 @@ Goal readiness → one active Plan → Tasklist DAG → task DoD/evidence
   unavailable tool creates explicit no-op evidence.
 - Agent-Reach and Context7 are optional freshness sources. They supplement stale
   model knowledge; they do not replace local evidence gates.
+- Hermes GitHub webhook ingress is documented in `docs/HERMES-GITHUB-RUNBOOK.md`.
+  `al github` validates project contract and current-HEAD decision artifacts; it
+  does not implement a second webhook server.
 - Upstream planning/review reasoning is referenced, not vendored. See README and
   `docs/research/2026-08-02-skill-collections-and-code-intelligence.md`.
 

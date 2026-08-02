@@ -37,6 +37,9 @@ while [ $# -gt 0 ]; do
 done
 export AL_DRY_RUN AL_INSTALL_MODE
 
+printf '\nWARNING: agentic-loop is for development, testing, and staging only.\n' >&2
+printf 'WARNING: never use it in production or expose production secrets.\n\n' >&2
+
 case "$AL_INSTALL_MODE" in
   symlink|copy) : ;;
   *) al_die "AL_INSTALL_MODE harus symlink atau copy, dapat: $AL_INSTALL_MODE" ;;

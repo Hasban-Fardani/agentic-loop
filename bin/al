@@ -29,6 +29,7 @@ EVIDENCE
   complexity [check]   ukur CCN via lizard (0=dalam budget 1=lewat 2=tak terukur)
   discovery <sub>      start|verify|show — bukti pencarian reuse sebelum koding
   goals <sub>          validate|start|show|verify|findings — Goal → Plan → Tasklist
+  github <sub>         validate|decision|list-decisions — Hermes GitHub contract
   verify               self-test policy & permission boundary di repo target
   selftest [pattern]   jalankan test suite toolkit ini sendiri
 
@@ -65,7 +66,7 @@ cmd="${1:-help}"
 [ $# -gt 0 ] && shift || true
 
 case "$cmd" in
-  run|scan|event|doctor|init|verify|clean|decision|scope|worktree|metrics|complexity|discovery|integrate|goals)
+  run|scan|event|doctor|init|verify|clean|decision|scope|worktree|metrics|complexity|discovery|integrate|goals|github)
     exec bash "$CMD_DIR/$cmd.sh" "$@" ;;
   selftest)
     exec bash "$AL_HOME/tests/run.sh" "$@" ;;
